@@ -3,7 +3,7 @@ import json
 from django.shortcuts import render
 from rest_framework.response import Response,responses
 from .models import LibroDiario
-from .serializers import LibroDiarioSerializer,boletaSerializer,boletaDetalleSerializers,BalanceSerializer
+from .serializers import LibroDiarioSerializer,boletaSerializer,boletaDetalleSerializers,BalanceSerializer, facturaSerializer, facturaDetalleSerializers
 from rest_framework.decorators import api_view,parser_classes
 from rest_framework.parsers import JSONParser
 from rest_framework import viewsets
@@ -105,7 +105,7 @@ def boletaCrear(request):
 
 
  	
-        #TRANSACCION IVA
+        #TRANSACCION IVA DEBITO
         iva_debe = 0
         iva_haber = serializer.data["iva_total"]
         iva_id_transaccion = '003IVAD'
@@ -141,7 +141,7 @@ def boletaCrear(request):
         # })
 
         #
-	# TRANSACCION CAJA-BANCO
+	    # TRANSACCION CAJA-BANCO
         if serializer.data["metodo_pago"] == "1":
             pago_id_transaccion = '001CAJA'
             pago_nombre_transaccion = 'CAJA'
@@ -255,4 +255,110 @@ def boletaCrear(request):
 
     else:
         return Response(serializer.errors)
-    return Response('insertado')#Response(serializer.data)
+    return Response('Boleta Insertada')#Response(serializer.data)
+
+
+@api_view(['POST'])
+@parser_classes([JSONParser])
+def facturaCrear(request):
+    serializer = facturaSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+
+        url = "http://127.0.0.1:8000/LibroDiario/crear"
+        headers = {'Content-type': 'application/json', }
+
+        # TRANSACCION PRODUCTO OK
+        # TRANSACCION IVA CREDITO OK
+        # TRANSACCION PROVEEDOR HABER OK
+        # TRANSACCION PROVEEDOR DEBE OK
+        # TRANSACCION CAJA OK
+
+        fecha_transaccion = serializer.data["fecha_venta"]
+
+        # TRANSACCION PRODUCTO
+        prd_producto_id_transaccion = '008PRODUCTO'
+        prd_producto_nombre_transaccion = 'PRODUCTO'
+        prd_producto_debe = serializer.data["neto_v"]
+        prd_producto_haber = 0
+
+
+        dataTransaccion = {'id_transaccion': prd_producto_id_transaccion,
+                           "nombre_transaccion": prd_producto_nombre_transaccion,
+                           "debe": prd_producto_debe,
+                           "haber": prd_producto_haber,
+                           "fecha": fecha_transaccion
+                           }
+        response = requests.post(url, data=json.dumps(dataTransaccion), headers=headers)
+
+        # TRANSACCION IVA CREDITO
+        ivac_id_transaccion = '009IVAC'
+        ivac_nombre_transaccion = 'IVA CREDITO'
+        ivac_debe = serializer.data["iva_total"]
+        ivac_haber = 0
+
+        dataTransaccion = {'id_transaccion': ivac_id_transaccion,
+                           "nombre_transaccion": ivac_nombre_transaccion,
+                           "debe": ivac_debe,
+                           "haber": ivac_haber,
+                           "fecha": fecha_transaccion
+                           }
+        response = requests.post(url, data=json.dumps(dataTransaccion), headers=headers)
+
+        # TRANSACCION PROVEEDOR HABER
+        prvH_id_transaccion = '010PRV'
+        prvH_nombre_transaccion = 'PROVEEDOR'
+        prvH_debe = 0
+        prvH_haber = serializer.data["total_v"]
+
+        dataTransaccion = {'id_transaccion': prvH_id_transaccion,
+                           "nombre_transaccion": prvH_nombre_transaccion,
+                           "debe": prvH_debe,
+                           "haber": prvH_haber,
+                           "fecha": fecha_transaccion
+                           }
+        response = requests.post(url, data=json.dumps(dataTransaccion), headers=headers)
+
+        # TRANSACCION PROVEEDOR DEBE
+        prvD_id_transaccion = '010PRV'
+        prvD_nombre_transaccion = 'PROVEEDOR'
+        prvD_debe = serializer.data["total_v"]
+        prvD_haber = 0
+
+        dataTransaccion = {'id_transaccion': prvD_id_transaccion,
+                           "nombre_transaccion": prvD_nombre_transaccion,
+                           "debe": prvD_debe,
+                           "haber": prvD_haber,
+                           "fecha": fecha_transaccion
+                           }
+        response = requests.post(url, data=json.dumps(dataTransaccion), headers=headers)
+
+        # TRANSACCION CAJA-BANCO-CXP
+
+        pago_debe = 0
+        pago_haber = serializer.data["total_v"]
+
+        if serializer.data["metodo_pago"] == "1":
+            pago_id_transaccion = '001CAJA'
+            pago_nombre_transaccion = 'CAJA'
+
+        elif serializer.data["metodo_pago"] == "2":
+            pago_id_transaccion = '002BANCO'
+            pago_nombre_transaccion = 'BANCO'
+        else:
+            pago_id_transaccion = '011CXP'
+            pago_nombre_transaccion = 'CUENTAS POR PAGAR'
+
+        dataTransaccion = {'id_transaccion': pago_id_transaccion,
+                           "nombre_transaccion": pago_nombre_transaccion,
+                           "debe": pago_debe,
+                           "haber": pago_haber,
+                           "fecha": fecha_transaccion
+                           }
+        response = requests.post(url, data=json.dumps(dataTransaccion), headers=headers)
+
+
+    else:
+        return Response(serializer.errors)
+    return Response('Factura Insertada')  # Response(serializer.data)
+

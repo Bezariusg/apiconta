@@ -16,4 +16,5 @@ urlpatterns = [
     path('eliminar',views.LibroDiarioEliminar, name="eliminar"),
     path('boleta', views.boletaCrear, name="boleta"),
     path('api/', include(router.urls)),
+    path('factura', views.facturaCrear, name="factura"),
 ]
