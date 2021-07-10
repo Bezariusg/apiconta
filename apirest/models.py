@@ -49,6 +49,7 @@ class boletaDetalle(models.Model):
 
 class notaDebito(models.Model):
     #id = models.AutoField(primary_key=True)
+    id_boleta = models.ForeignKey(boleta, on_delete=models.CASCADE,related_name='detalle')
     id_cliente = models.IntegerField()
     nombre_cliente = models.CharField(max_length=100)
     concepto = models.CharField(max_length=100)
