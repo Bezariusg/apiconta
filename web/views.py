@@ -19,7 +19,7 @@ def balance(request):
     })
 
 def TestBalance(request):
-    response = requests.get('http://127.0.0.1:8000/LibroDiario/balanceFechas/2021-06-25/2021-07-09').json()
+    response = requests.get('http://127.0.0.1:8000/LibroDiario/balanceFechas/2021-06-25/2021-07-10').json()
     return render(request,'web/TestLBalance.html', {
         'response':response
     })

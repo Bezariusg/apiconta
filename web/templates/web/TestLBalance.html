@@ -5,7 +5,10 @@
 
 <main class="main">
 <div class="contenedor">
-<button type="button">Click Me!</button>
+    <form action="">
+        <button type="button">Click Me!</button>
+    </form>
+
 
 <table class="tabla_asiento" style="width:50%">
   <tr class="cabecera_tabla">
@@ -45,7 +48,7 @@
 
 
 
-            {% if obj.id_transaccion == '001CAJA' or obj.id_transaccion == '002BANCO' or obj.id_transaccion == '003IVAD' or obj.id_transaccion == '005CLIENTE' or obj.id_transaccion == '006CXC' or obj.id_transaccion == '008PRODUCTO'%}
+            {% if obj.id_transaccion == '001CAJA' or obj.id_transaccion == '002BANCO' or obj.id_transaccion == '003IVAD' or obj.id_transaccion == '005CLIENTE' or obj.id_transaccion == '006CXC' or obj.id_transaccion == '008PRODUCTO' or obj.id_transaccion == '009IVAC' or obj.id_transaccion == '010PRV' or obj.id_transaccion == '011CXP'%}
 
                 {% if obj.Debe > obj.Haber %}
 

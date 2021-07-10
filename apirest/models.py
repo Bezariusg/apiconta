@@ -60,7 +60,7 @@ class notaDebito(models.Model):
     metodo_devolucion = models.CharField(max_length=10, default='1')  ## EFECTIVO 1 DEBITO 2
 
     class Meta:
-        db_table = 'NotaDebito'
+        db_table = 'notaDebito'
 
     def __int__(self):
         return  self.id
