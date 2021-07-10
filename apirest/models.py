@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import timezone
 
+#COMMENTS
+
 # Create your models here.
 
 class LibroDiario(models.Model):
