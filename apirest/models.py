@@ -8,10 +8,8 @@ from django.utils import timezone
 class LibroDiario(models.Model):
     id_transaccion = models.CharField(max_length=100, default= 'DEFAULT VALUE')
     nombre_transaccion = models.CharField(max_length=100, default= 'DEFAULT VALUE')
-    #debe = models.CharField(max_length=50, default= '0')
-    debe = models.IntegerField()
-    #haber = models.CharField(max_length=50, default= '0')
-    haber = models.IntegerField()
+    debe = models.CharField(max_length=50, default= 'DEFAULT VALUE')
+    haber = models.CharField(max_length=50, default= 'DEFAULT VALUE')
     fecha = models.DateField(auto_now_add=True)
 
 
@@ -49,7 +47,7 @@ class boletaDetalle(models.Model):
     def __int__(self):
         return  self.id
 
-class notaCredito(models.Model):
+class notaDebito(models.Model):
     #id = models.AutoField(primary_key=True)
     id_boleta = models.ForeignKey(boleta, on_delete=models.CASCADE,related_name='boleta', default=0)
     id_cliente = models.IntegerField()
@@ -59,10 +57,10 @@ class notaCredito(models.Model):
     neto = models.IntegerField(default=0)
     iva_total = models.IntegerField(default=0)
     total_v = models.IntegerField(default=0)
-    metodo_devolucion = models.CharField(max_length=10, default='1')  ## EFECTIVO 1 DEBITO 2
+    metodo_devolucion = models.CharField(max_length=10, default='DEFAULT VALUE')  ## EFECTIVO 1 DEBITO 2
 
     class Meta:
-        db_table = 'NotaCredito'
+        db_table = 'NotaDebito'
 
     def __int__(self):
         return  self.id

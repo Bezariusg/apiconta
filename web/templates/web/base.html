@@ -10,19 +10,22 @@
     <script src="https://kit.fontawesome.com/5088044043.js" crossorigin="anonymous"></script>
     <script defer src="../../static/apicontab/js/index.js"></script>
     {% load static %}
+    <link rel="icon" href="../../static/apicontab/images/favicon.png" type="image/png">
+
 
 </head>
 <body>
 <header class="header">
     <nav class="nav">
-        <a href="#" class="logo nav-link">Contabilidad</a>
+        <a href="{% url 'home' %}" class="logo nav-link">Contabilidad</a>
+        <img src="../../static/apicontab/images/logo.png" alt="logo" class="logo_img">
         <button class="nav-toggle" aria-label="Abrir menu">
             <i class="fas fa-hamburger"></i>
         </button>
         <ul class="nav-menu nav-menu_visible">
             <li class="nav-menu-item"><a href="{% url 'home' %}" class="nav-menu-link nav-link ">Inicio</a></li>
             <li class="nav-menu-item"><a href="{% url 'librodiario' %}" class="nav-menu-link nav-link ">Libro Diario</a></li>
-            <li class="nav-menu-item"><a href="#" class="nav-menu-link nav-link ">Balance</a></li>
+            <li class="nav-menu-item"><a href="{% url 'TestBalance' %}" class="nav-menu-link nav-link ">Balance</a></li>
             <li class="nav-menu-item"><a href="#" class="nav-menu-link nav-link ">Soporte</a></li>
 
         </ul>
@@ -34,4 +37,10 @@
 
   </div>
 </body>
+
+<footer class="footer">
+  <div class="firma">
+    <p>Sitio diseñada por @Gerardo_Ahumada @Felipe_Herrera</p>
+  </div>
+</footer>
 </html>
