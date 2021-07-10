@@ -47,3 +47,19 @@ class boletaDetalle(models.Model):
     def __int__(self):
         return  self.id
 
+class notaDebito(models.Model):
+    #id = models.AutoField(primary_key=True)
+    id_cliente = models.IntegerField()
+    nombre_cliente = models.CharField(max_length=100)
+    concepto = models.CharField(max_length=100)
+    fecha = models.DateField(auto_now_add=False)
+    neto = models.IntegerField(default=0)
+    iva_total = models.IntegerField(default=0)
+    total_v = models.IntegerField(default=0)
+    metodo_devolucion = models.CharField(max_length=10, default='DEFAULT VALUE')  ## EFECTIVO 1 DEBITO 2
+
+    class Meta:
+        db_table = 'NotaDebito'
+
+    def __int__(self):
+        return  self.id
