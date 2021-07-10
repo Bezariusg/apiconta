@@ -1,0 +1,80 @@
+{% extends 'web/base.html' %}
+
+
+{% block contenido %}
+
+<main class="main">
+<div class="contenedor">
+
+<table class="tabla_asiento" style="width:50%">
+  <tr class="cabecera_tabla">
+      <th>ID</th>
+      <th>CUENTA QUE INTERVIENE</th>
+      <th>DEBE</th>
+      <th>HABER</th>
+      <th>SALDO DEUDOR</th>
+      <th>SALDO ACRREDOR</th>
+  </tr>
+
+        {% for obj in response %}
+        <tr class="contenido_tabla">
+            <td>{{ obj.id_transaccion }}</td>
+            <td>{{ obj.nombre_transaccion }} </td>
+            <td>{{ obj.Debe }} </td>
+            <td>{{ obj.Haber }} </td>
+
+
+            {% if obj.Debe > obj.Haber %}
+
+            <td> {{ obj.SaldoDeudor}} </td>
+            <td> 0 </td>
+
+            {% else %}
+
+            <td> 0 </td>
+            <td> {{ obj.SaldoAcreedor}} </td>
+
+
+            {% endif %}
+
+
+
+            {% if obj.id_transaccion == '001CAJA' or obj.id_transaccion == '002BANCO' or obj.id_transaccion == '002BANCO' %}
+
+
+            {% elseif %}
+
+
+
+
+            {% endif %}
+
+
+
+        </tr>
+        {% endfor %}
+
+</table>
+</div>
+</main>
+
+{% endblock%}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
