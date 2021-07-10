@@ -28,6 +28,19 @@ def LibroDiarioLista(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
+def BalanceDiario(request, pk):
+    librodiario = LibroDiario.objects.all()
+    librodiario = librodiario.filter(fecha=pk)
+    serializer = LibroDiarioSerializer(librodiario , many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def BalanceFechas(request, pk1,pk2):
+    librodiario = LibroDiario.objects.filter(fecha__range= (pk1,pk2))
+    serializer = LibroDiarioSerializer(librodiario , many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
 def LibroDiarioDetalle(request, pk):
     librodiario = LibroDiario.objects.get(id=pk)
     serializer = LibroDiarioSerializer(librodiario, many=False)
