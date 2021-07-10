@@ -7,6 +7,17 @@ class LibroDiarioSerializer(serializers.ModelSerializer):
         model = LibroDiario
         fields = '__all__'
 
+class BalanceSerializer(serializers.ModelSerializer):
+    Debe = serializers.IntegerField()
+    Haber = serializers.IntegerField()
+    SaldoDeudor = serializers.IntegerField()
+    SaldoAcreedor =serializers.IntegerField()
+
+    class Meta:
+        model = LibroDiario
+        fields = 'id_transaccion','nombre_transaccion','Debe','Haber','SaldoDeudor','SaldoAcreedor'
+
+
 class boletaDetalleSerializers(serializers.ModelSerializer):
     class Meta:
         model = boletaDetalle

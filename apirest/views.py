@@ -3,12 +3,13 @@ import json
 from django.shortcuts import render
 from rest_framework.response import Response,responses
 from .models import LibroDiario
-from .serializers import LibroDiarioSerializer,boletaSerializer,boletaDetalleSerializers
+from .serializers import LibroDiarioSerializer,boletaSerializer,boletaDetalleSerializers,BalanceSerializer
 from rest_framework.decorators import api_view,parser_classes
 from rest_framework.parsers import JSONParser
 from rest_framework import viewsets
 from .models import boleta, boletaDetalle
 import requests
+from django.db.models import Sum,Count,Case,When,IntegerField,F
 # Create your views here.
 
 
@@ -36,8 +37,17 @@ def BalanceDiario(request, pk):
 
 @api_view(['GET'])
 def BalanceFechas(request, pk1,pk2):
-    librodiario = LibroDiario.objects.filter(fecha__range= (pk1,pk2))
-    serializer = LibroDiarioSerializer(librodiario , many=True)
+
+    #query = 'select * from libroDiario'
+    #with connection.cursor() as cursor:
+        #cursor.execute(query)
+        #serializer = LibroDiarioSerializer(cursor.fetchall(), many=True)
+       # cursor.close()
+
+    #librodiario = LibroDiario.objects.values('id_transaccion','nombre_transaccion').annotate(sum(Debe='debe').annotate(sum(Haber='haber')).filter(fecha__range= (pk1,pk2))    #Sum('haber')-Sum('debe'))
+    librodiario = LibroDiario.objects.filter(fecha__range= (pk1,pk2)).values('id_transaccion','nombre_transaccion').annotate(Debe=Sum('debe')).annotate(Haber=Sum('haber')).annotate(SaldoDeudor = Sum('debe')-Sum('haber')).annotate(SaldoAcreedor = Sum('haber')-Sum('debe'))  #Case(When('debe' == 'haber',then=1),output_field=IntegerField())).annotate(SaldoAcreedor = Case(When('haber' == 'debe',then=1),output_field=IntegerField()))
+    #librodiario = librodiario.objects.values()
+    serializer = BalanceSerializer(librodiario , many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
